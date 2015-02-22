@@ -1,0 +1,26 @@
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.exe.config
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.exe
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.pdb
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.csprojResolveAssemblyReference.cache
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\MainWindow.baml
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\MainWindow.g.cs
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\App.g.cs
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage_MarkupCompile.cache
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.g.resources
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.Properties.Resources.resources
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.csproj.GenerateResource.Cache
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.exe
+c:\Study\C#\seminars-master\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.pdb
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.exe.config
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.exe
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.pdb
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.exe
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\bin\Debug\BlurContrastBrightnessImage.pdb
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.csprojResolveAssemblyReference.cache
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\MainWindow.baml
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\MainWindow.g.cs
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\App.g.cs
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage_MarkupCompile.cache
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.g.resources
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.Properties.Resources.resources
+C:\Users\Вадим\Documents\Visual Studio 2013\Projects\seminar02\BlurContrastBrightnessImage\obj\Debug\BlurContrastBrightnessImage.csproj.GenerateResource.Cache
