@@ -13,7 +13,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="openFileButton" Grid.Column="0" Grid.Row="0" Content="Open image" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10" Margin="28,10,64,0" Click="openFileButton_Click" Height="58" Width="266"/>
+        <Button x:Name="openFileButton" Grid.Column="0" Grid.Row="0" Content="Open image" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="10" Margin="40,10,86,0" Click="openFileButton_Click" Height="58" Width="232"/>
 
         <Grid Grid.Column="1" Grid.Row="0" x:Name="slidersGrid" Margin="3,0,-3,10" IsEnabled="False">
             <Grid.ColumnDefinitions>
@@ -27,14 +27,16 @@
             </Grid.RowDefinitions>
 
 
-            <Slider x:Name="gaussSlider" Grid.Column="0" Grid.Row="0" ValueChanged="gaussSlider_ValueChanged" SmallChange="1" Background="White" BorderBrush="#FFC12B2B" Foreground="#FF7AB821" Minimum="1"/>
+            <Slider x:Name="gaussSlider" Grid.Column="0" Grid.Row="0" ValueChanged="gaussSlider_ValueChanged" SmallChange="1" Background="White" BorderBrush="#FFC12B2B" Foreground="#FF7AB821" Minimum="1" Grid.ColumnSpan="2" Margin="10,0,15,0"/>
             <Label Content="" Grid.Column="1" Grid.Row="0"/>
             <Label Content="" Grid.Column="1" Grid.Row="1"/>
             <Label Grid.Column="1" Grid.Row="2"/>
-            <Button Content="DoG???" RenderTransformOrigin="0.525,0.596" Click="Button_Click_3" Margin="108,30,32,0"/>
-            <Button Content="Edges" HorizontalAlignment="Left" Height="34" Margin="10,30,0,0" VerticalAlignment="Top" Width="80" Click="Button_Click"/>
-            <Button Grid.ColumnSpan="2" Content="Button" HorizontalAlignment="Left" Height="34" Margin="229,30,0,0" VerticalAlignment="Top" Width="85"/>
-            <Button Grid.ColumnSpan="2" Content="BLOB IT&#xD;&#xA;   UP" HorizontalAlignment="Left" Height="34" Margin="229,30,0,0" VerticalAlignment="Top" Width="85" Click="Button_Click_1"/>
+            <StackPanel Grid.ColumnSpan="2" Margin="10,30,45,0" Orientation="Horizontal">
+                <Button Content="Edges" HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="95" Click="Button_Click"/>
+                <Button Content="DoG???" RenderTransformOrigin="0.525,0.596" Click="Button_Click_3" Width="103"/>
+                <Button Content="BLOB IT&#xA;   UP" HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="105" Click="Button_Click_1" RenderTransformOrigin="0.518,0.618"/>
+
+            </StackPanel>
 
         </Grid>
 
