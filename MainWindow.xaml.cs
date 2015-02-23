@@ -56,14 +56,14 @@ namespace BlurContrastBrightnessImage
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e) {
-            processedImageBytes = ImageProcessing.getNiceBlobs(originalImageBytes);
+            processedImageBytes = ImageProcessing.getDifferenceOfGaussins(originalImageBytes);
             grayscalePanel.Source = ImageConvertor.ByteArrayToImage(processedImageBytes, originalImage.PixelWidth, originalImage.PixelHeight, 1);
         }
 
         private void gaussSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             if (e.NewValue <= 1)
                 return;
-            processedImageBytes = ImageProcessing.getNiceBlobs(originalImageBytes, (int) e.NewValue);
+            processedImageBytes = ImageProcessing.getDifferenceOfGaussins(originalImageBytes, (int) e.NewValue);
             grayscalePanel.Source = ImageConvertor.ByteArrayToImage(processedImageBytes, originalImage.PixelWidth, originalImage.PixelHeight, 1);
         }
 
@@ -72,7 +72,7 @@ namespace BlurContrastBrightnessImage
             
             grayscalePanel.Source = originalImage;
 
-            List<double[]> Blobs = ImageProcessing.getBlobCoords(originalImageBytes, 50);
+            List<double[]> Blobs = ImageProcessing.getBlobCoordsUsingLaplacianKernel(originalImageBytes);
             
 
             foreach (double[] coord in Blobs) {
@@ -85,7 +85,6 @@ namespace BlurContrastBrightnessImage
                 Canvas.SetTop(el, coord[1] * originalPanel.ActualHeight - r);
                 drawPanel.Children.Add(el);
             }
-            //throw new NotFiniteNumberException();
             drawPanel.Visibility = System.Windows.Visibility.Visible;
         }
     }

@@ -45,11 +45,13 @@ namespace BlurContrastBrightnessImage
                 double[,] ker = new double[r, r];
                 for (int i = -r / 2; i <= r / 2; i++) {
                     for (int j = -r / 2; j <= r / 2; j++) {
-                        double sigma1 = sigma - 0.1;
+                       /* double sigma1 = sigma - 0.1;
                         double sigma2 = sigma + 0.1;
                         double G1 = 1 / (2 * Math.PI * sigma1 * sigma1) * Math.Pow(Math.E, (-i * i - j * j) / (2 * sigma1 * sigma1));
                         double G2 = 1 / (2 * Math.PI * sigma2 * sigma2) * Math.Pow(Math.E, (-i * i - j * j) / (2 * sigma2 * sigma2));
-                        ker[r / 2 + i, r / 2 + j] =  (G1 - G2) / 0.2;
+                        ker[r / 2 + i, r / 2 + j] =  (G1 - G2) / 0.2;*/
+                       // ker[r / 2 + i, r / 2 + j] = (i * i + j * j - 2 * sigma * sigma) * Math.Pow(Math.E, (-i * i - j * j) / (2 * sigma * sigma));
+                        ker[r / 2 + i, r / 2 + j] =  (-1 / (Math.PI * Math.Pow(sigma, 2)) ) * (1 - (i * i + j * j) / (2 * sigma * sigma) ) * Math.Pow(Math.E, (-i * i - j * j) / (2 * sigma * sigma));
                     }
                 }
                 laplacian.Add(sigma, ker);
