@@ -43,7 +43,75 @@ namespace BlurContrastBrightnessImage
             return grayscaled;
         }
 
+        private static int pixel(int w, int h) {
+            w = w >= W ? W - 1 : w < 0 ? 0 : w;
+            h = h >= H ? H - 1 : h < 0 ? 0 : h;
+            return W * h + w;
+        }
+
         private static double[] applyMatrix(double[] image, double[,] ker) {
+            /// TODO: do smth with frames
+            double[] output = new double[image.Length];
+            int r = ker.GetLength(0);
+            for (int x = r / 2; x < W - r / 2; x++) {
+                for (int y = r / 2; y < H - r / 2; y++) {
+                    for (int dx = -r / 2; dx <= r / 2; dx++) {
+                        for (int dy = -r / 2; dy <= r / 2; dy++) {
+                            output[W * y + x] += ker[dx + r/2, dy + r/2] * image[W * (y + dy) + (x + dx)];
+                            //output[W * y + x] += ker[dx + r / 2, dy + r / 2] * image[pixel(x + dx, y + dy)];
+                        }
+                    }
+                }
+            }
+
+            /*for (int x = 0; x < r / 2; x++) {
+                for (int y = 0; y < H; y++) {
+                    for (int dx = -r / 2; dx <= r / 2; dx++) {// write 9 lines insdead of 2 fors, u lazy moron
+                        for (int dy = -r / 2; dy <= r / 2; dy++) {
+                            //output[W * y + x] += ker[dx + r/2, dy + r/2] * image[W * (y + dy) + (x + dx)];
+                            output[W * y + x] += ker[dx + r / 2, dy + r / 2] * image[pixel(x + dx, y + dy)];
+                        }
+                    }
+                }
+            }
+
+            for (int x = W - r / 2; x < W; x++) {
+                for (int y = 0; y < H; y++) {
+                    for (int dx = -r / 2; dx <= r / 2; dx++) {// write 9 lines insdead of 2 fors, u lazy moron
+                        for (int dy = -r / 2; dy <= r / 2; dy++) {
+                            //output[W * y + x] += ker[dx + r/2, dy + r/2] * image[W * (y + dy) + (x + dx)];
+                            output[W * y + x] += ker[dx + r / 2, dy + r / 2] * image[pixel(x + dx, y + dy)];
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < W; x++) {
+                for (int y = 0; y < r / 2; y++) {
+                    for (int dx = -r / 2; dx <= r / 2; dx++) {// write 9 lines insdead of 2 fors, u lazy moron
+                        for (int dy = -r / 2; dy <= r / 2; dy++) {
+                            //output[W * y + x] += ker[dx + r/2, dy + r/2] * image[W * (y + dy) + (x + dx)];
+                            output[W * y + x] += ker[dx + r / 2, dy + r / 2] * image[pixel(x + dx, y + dy)];
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < W; x++) {
+                for (int y = H - r / 2; y < H; y++) {
+                    for (int dx = -r / 2; dx <= r / 2; dx++) {// write 9 lines insdead of 2 fors, u lazy moron
+                        for (int dy = -r / 2; dy <= r / 2; dy++) {
+                            //output[W * y + x] += ker[dx + r/2, dy + r/2] * image[W * (y + dy) + (x + dx)];
+                            output[W * y + x] += ker[dx + r / 2, dy + r / 2] * image[pixel(x + dx, y + dy)];
+                        }
+                    }
+                }
+            }*/
+
+            return output;
+        }
+
+        /*private static double[] applyMatrix(double[] image, double[,] ker) {
             /// TODO: do smth with frames
             double[] output = new double[image.Length];
             int r = ker.GetLength(0);
@@ -57,7 +125,7 @@ namespace BlurContrastBrightnessImage
                 }
             }
             return output;
-        }
+        }*/
 
         private static double[] substractArrays(double[] A, double[] B) {
             double[] output = new double[A.Length];
@@ -180,7 +248,7 @@ namespace BlurContrastBrightnessImage
 
         #region Blobs
 
-        private const int Height = 20;
+        private const int Height = 15;
 
         public static byte[] getDifferenceOfGaussins(byte[] imageBytes, int k = 1) {
             double[] image = setGrayScale(doubleArray(imageBytes));
@@ -239,58 +307,7 @@ namespace BlurContrastBrightnessImage
                         }
 
                         if (isLocalMaxima || isLocalMinma) {
-                            OUTPUTBLOBS.Add(new double[3] { w / (W + 0.0), h / (H + 0.0), (t + 1) / (W + 0.0) });
-                            //OUTPUTBLOBS.Add(new double[3] { w / (W + 0.0), h / (H + 0.0), 0.01});
-                        }
-                    }
-                }
-            }
-            return OUTPUTBLOBS;
-        }
-
-        public static List<double[]> getBlobCoords(byte[] imageBytes) {
-            List<double[]> BLOBS = new List <double[]>();
-            double[] image = setGrayScale(doubleArray(imageBytes));
-            /*double[,] gaussKer = new double[,] { { 1 / 16.0, 1 / 8.0, 1 / 16.0 }, 
-                                                 { 1 / 8.0,  1 / 4.0, 1 / 8.0 },
-                                                 { 1 / 16.0, 1 / 8.0, 1 / 16.0 } };*/
-            double[,] gaussKer = Kernels.getGaussian(1.4);
-            double[][] smoothedImages = new double[Height][];
-
-            smoothedImages[0] = applyMatrix(image, gaussKer);
-
-            for (int i = 1; i < Height; i++) {
-                smoothedImages[i] = applyMatrix(smoothedImages[i - 1], gaussKer);
-            }
-
-            double[][] lapassedImages = new double[Height - 1][]; 
-            for (int i = 0; i < Height - 1; i++) {
-                lapassedImages[i] = substractArrays(smoothedImages[i + 1], smoothedImages[i]);
-            }
-
-            List<double[]> OUTPUTBLOBS = new List<double[]>();
-
-            for (int w = 10 ; w < W - 10; w++) {  
-                for (int h = 10; h < H - 10; h++) {
-                    for (int t = 1; t < Height - 2; t++) {
-                        //bool isBlob = true;
-                        bool maxima = true;
-                        bool minima = true;
-                        double current = lapassedImages[t][h * W + w];
-                        for (int dw = -1; dw <= 1; dw++) {
-                            for (int dh = -1; dh <= 1; dh++) {
-                                for (int dt = -1; dt <= 1; dt++) {
-                                    if ((t + dt < Height - 2) && (t - dt >= 1) && (dt != 0 || dh != 0 || dw != 0)) {
-                                        if ((lapassedImages[t + dt][(h + dh) * W + (w + dw)]) >= current)
-                                            maxima = false;
-                                        else
-                                            minima = false;
-                                    }
-                                }
-                            }
-                        }
-                        if (maxima || minima) {
-                            OUTPUTBLOBS.Add(new double[3] { w / (W + 0.0), h / (H + 0.0), t / (W + 0.0) / Math.Pow(2, 2.5) });
+                            OUTPUTBLOBS.Add(new double[4] { w / (W + 0.0), h / (H + 0.0), (t + 1) / (W + 0.0), Math.Abs(current) });
                         }
                     }
                 }

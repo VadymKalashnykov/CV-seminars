@@ -37,6 +37,7 @@ namespace BlurContrastBrightnessImage
             if (openFileDialog.ShowDialog() == true) {
                 showImage(openFileDialog.FileName);
                 slidersGrid.IsEnabled = true;
+                _blobs = null;
             }
         }
 
@@ -60,14 +61,43 @@ namespace BlurContrastBrightnessImage
             grayscalePanel.Source = ImageConvertor.ByteArrayToImage(processedImageBytes, originalImage.PixelWidth, originalImage.PixelHeight, 1);
         }
 
+
+        List<double[]> _blobs = null;
+
         private void gaussSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            if (e.NewValue <= 1)
+            if (e.NewValue == 1)
                 return;
-            processedImageBytes = ImageProcessing.getDifferenceOfGaussins(originalImageBytes, (int) e.NewValue);
-            grayscalePanel.Source = ImageConvertor.ByteArrayToImage(processedImageBytes, originalImage.PixelWidth, originalImage.PixelHeight, 1);
+            if (_blobs == null) {
+                _blobs = ImageProcessing.getBlobCoordsUsingLaplacianKernel(originalImageBytes);
+            }
+
+            drawPanel.Children.Clear();
+
+            grayscalePanel.Source = originalImage;
+
+            List<double[]> Blobs = _blobs.OrderByDescending(x => x[3]).Take((int)e.NewValue).ToList();
+
+            foreach (double[] coord in Blobs) {
+                Ellipse el = new Ellipse();
+                el.Stroke = System.Windows.Media.Brushes.Red;
+                el.StrokeThickness = 1.3;
+                double r = coord[2] * originalPanel.ActualWidth;
+                el.Width = 2 * r;
+                el.Height = 2 * r;
+                Canvas.SetLeft(el, coord[0] * originalPanel.ActualWidth - r);
+                Canvas.SetTop(el, coord[1] * originalPanel.ActualHeight - r);
+                drawPanel.Children.Add(el);
+            }
+            drawPanel.Visibility = System.Windows.Visibility.Visible;
+
+            //if (e.NewValue <= 1)
+              //  return;
+            //processedImageBytes = ImageProcessing.getDifferenceOfGaussins(originalImageBytes, (int) e.NewValue);
+            //grayscalePanel.Source = ImageConvertor.ByteArrayToImage(processedImageBytes, originalImage.PixelWidth, originalImage.PixelHeight, 1);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
+            System.DateTime start =  System.DateTime.Now; 
             drawPanel.Children.Clear();
             
             grayscalePanel.Source = originalImage;
@@ -78,6 +108,7 @@ namespace BlurContrastBrightnessImage
             foreach (double[] coord in Blobs) {
                 Ellipse el = new Ellipse();
                 el.Stroke = System.Windows.Media.Brushes.Red;
+                el.StrokeThickness = 1.3;
                 double r = coord[2] * originalPanel.ActualWidth;
                 el.Width = 2 * r;
                 el.Height = 2 * r;
@@ -86,6 +117,8 @@ namespace BlurContrastBrightnessImage
                 drawPanel.Children.Add(el);
             }
             drawPanel.Visibility = System.Windows.Visibility.Visible;
+            System.DateTime finish = System.DateTime.Now;
+            MessageBox.Show(String.Format("It took us {0} sec to find blobs", (finish - start).TotalSeconds.ToString()));
         }
     }
 }
