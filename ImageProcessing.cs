@@ -1,8 +1,10 @@
-﻿using System;
+﻿#undef DEBUG
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace BlurContrastBrightnessImage
 {
@@ -64,7 +66,8 @@ namespace BlurContrastBrightnessImage
                 }
             }
 
-            /*for (int x = 0; x < r / 2; x++) {
+#if DEBUG
+            for (int x = 0; x < r / 2; x++) {
                 for (int y = 0; y < H; y++) {
                     for (int dx = -r / 2; dx <= r / 2; dx++) {// write 9 lines insdead of 2 fors, u lazy moron
                         for (int dy = -r / 2; dy <= r / 2; dy++) {
@@ -106,8 +109,8 @@ namespace BlurContrastBrightnessImage
                         }
                     }
                 }
-            }*/
-
+            }
+#endif
             return output;
         }
 
@@ -248,9 +251,9 @@ namespace BlurContrastBrightnessImage
 
         #region Blobs
 
-        private const int Height = 15;
+        private const int Height = 10;
 
-        public static byte[] getDifferenceOfGaussins(byte[] imageBytes, int k = 1) {
+        public static byte[] getDifferenceOfGaussins(byte[] imageBytes, int k = 7) {
             double[] image = setGrayScale(doubleArray(imageBytes));
             /*double[,] gaussKer = new double[,] { { 1 / 16.0, 1 / 8.0, 1 / 16.0 }, 
                                                  { 1 / 8.0,  1 / 4.0, 1 / 8.0 },
@@ -267,8 +270,7 @@ namespace BlurContrastBrightnessImage
 
             double[][] lapassedImages = new double[Height - 1][];
             for (int i = 0; i < Height - 1; i++) {
-                //lapassedImages[i] = substractArrays(smoothedImages[i + 1], smoothedImages[i]);
-                lapassedImages[i] = applyMatrix(image, Kernels.getLaplacian(0.7 * k));
+                lapassedImages[i] = substractArrays(smoothedImages[i + 1], smoothedImages[i]);
             }
 
             return byteArray(Array.ConvertAll(lapassedImages[k], x => x / 2 + 120));
@@ -279,9 +281,21 @@ namespace BlurContrastBrightnessImage
             double[] image = setGrayScale(doubleArray(imageBytes));
 
             double[][] lapassedImages = new double[Height - 1][];
-            for (int i = 0; i < Height - 1; i++) {
-                lapassedImages[i] = applyMatrix(image, Kernels.getLaplacian(0.7 * (i + 1)));
+            lapassedImages[0] = applyMatrix(image, Kernels.getLaplacian(0.7));
+            for (int i = 1; i < Height - 1; i++) {
+                lapassedImages[i] = applyMatrix(image, Kernels.getLaplacian(1.4 * (i + 1)));
             }
+
+            /*double[][] gaussedImages = new double[Height][];
+            gaussedImages[0] = applyMatrix(image, Kernels.getGaussian(0.7));
+
+            for (int i = 1; i < Height; i++) {
+                gaussedImages[i] = applyMatrix(gaussedImages[0], Kernels.getGaussian(1.4 * (i)));
+            }
+
+            for (int i = 0; i < Height - 1; i++) {
+                lapassedImages[i] = substractArrays(gaussedImages[i + 1] , gaussedImages[i]);
+            }*/
 
             List<double[]> OUTPUTBLOBS = new List<double[]>();
 
@@ -299,7 +313,7 @@ namespace BlurContrastBrightnessImage
                                     if ((dt != 0 || dh != 0 || dw != 0)) {
                                         if ((lapassedImages[t + dt][(h + dh) * W + (w + dw)]) <= current)
                                             isLocalMinma = false;
-                                        if ((lapassedImages[t + dt][(h + dh) * W + (w + dw)]) >= current )
+                                        if ((lapassedImages[t + dt][(h + dh) * W + (w + dw)]) >= current)
                                             isLocalMaxima = false;
                                     }
                                 }
@@ -307,12 +321,35 @@ namespace BlurContrastBrightnessImage
                         }
 
                         if (isLocalMaxima || isLocalMinma) {
-                            OUTPUTBLOBS.Add(new double[4] { w / (W + 0.0), h / (H + 0.0), (t + 1) / (W + 0.0), Math.Abs(current) });
+                            bool hasLocalMinimaOnScale = false;
+                            bool hasLocalMaximaOnScale = false;
+                            int pix = h * W + w;
+                            for (int T = 1; T < Height - 2; T++) {
+                                if (lapassedImages[T][pix] > lapassedImages[T + 1][pix] && lapassedImages[T][pix] > lapassedImages[T - 1][pix])
+                                    hasLocalMaximaOnScale = true;
+
+                                if (lapassedImages[T][pix] < lapassedImages[T + 1][pix] && lapassedImages[T][pix] < lapassedImages[T - 1][pix])
+                                    hasLocalMinimaOnScale = true;
+                            }
+
+                            if (hasLocalMaximaOnScale ^ hasLocalMinimaOnScale)
+                                OUTPUTBLOBS.Add(new double[4] { w / (W + 0.0), h / (H + 0.0), 2 * (t + 1) / (W + 0.0), Math.Abs(current) });
                         }
                     }
                 }
             }
+
+            OUTPUTBLOBS = OUTPUTBLOBS.Where(blob => {
+                double x = blob[0];
+                return true;
+            }).ToList();
+
             return OUTPUTBLOBS;
+        }
+
+        private static List<double[]> filterBlobs(List<double[]> foundBlobs) {
+            List<double[]> filteredBlobs = new List<double[]>();
+            return filteredBlobs;
         }
 
         #endregion
